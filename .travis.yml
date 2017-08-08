@@ -1,0 +1,13 @@
+dist: trusty
+sudo: required
+language: java
+
+services:
+  - docker
+
+script:
+  # https://docs.travis-ci.com/user/docker/
+  - docker pull enkeys/alpine-openjdk-amq7-snapshot
+  - docker run -d enkeys/alpine-openjdk-amq7-snapshot
+  - sleep 3
+  - mvn clean verify
