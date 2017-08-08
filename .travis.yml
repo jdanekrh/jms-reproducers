@@ -8,6 +8,6 @@ services:
 script:
   # https://docs.travis-ci.com/user/docker/
   - docker pull enkeys/alpine-openjdk-amq7-snapshot
-  - docker run --rm enkeys/alpine-openjdk-amq7-snapshot &
-  - sleep 5
+  - docker run --rm -v`pwd`:/mnt -p 61616:61616 --entrypoint ash enkeys/alpine-openjdk-amq7-snapshot /mnt/entrypoint.sh amq7-server &
+  - sleep 10
   - mvn clean verify
