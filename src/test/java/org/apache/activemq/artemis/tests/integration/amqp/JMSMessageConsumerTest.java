@@ -37,6 +37,7 @@ public class JMSMessageConsumerTest extends JMSClientTestSupport {
    @Test(timeout = 30000)
    public void testSelectorsWithJMSPriority() throws Exception {
       Connection connection = createConnection();
+      connection.start();
 
       try {
          Session session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
@@ -50,6 +51,8 @@ public class JMSMessageConsumerTest extends JMSClientTestSupport {
          message = session.createTextMessage();
          message.setText("hello + 9");
          p.send(message, DeliveryMode.PERSISTENT, 9, 0);
+
+         Thread.sleep(2000);
 
          QueueBrowser browser = session.createBrowser(queue);
          Enumeration enumeration = browser.getEnumeration();
