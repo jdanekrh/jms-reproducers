@@ -7,15 +7,16 @@ import org.apache.activemq.artemis.api.core.client.ActiveMQClient;
 import org.apache.activemq.artemis.api.core.client.ClientSession;
 import org.apache.activemq.artemis.core.remoting.impl.netty.NettyConnectorFactory;
 import org.apache.activemq.artemis.jms.client.ActiveMQConnectionFactory;
+import org.apache.activemq.artemis.jms.client.ActiveMQQueue;
 import org.apache.activemq.artemis.jms.client.ActiveMQTopic;
 import org.apache.qpid.jms.JmsConnectionFactory;
-import org.apache.qpid.jms.JmsTopic;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.runners.Parameterized;
 
 import javax.jms.ConnectionFactory;
 import javax.jms.JMSContext;
+import javax.jms.Queue;
 import javax.jms.Topic;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -78,9 +79,15 @@ public class JMSTestBase {
       return cf.createContext();
    }
 
+   protected Queue createQueue(final String queueName) throws Exception {
+      SimpleString address = SimpleString.toSimpleString(queueName);
+      clientSession.createAddress(address, RoutingType.ANYCAST, false);
+      return new ActiveMQQueue(queueName);
+   }
+
    protected Topic createTopic(final String topicName) throws Exception {
       SimpleString address = SimpleString.toSimpleString(topicName);
       clientSession.createAddress(address, RoutingType.MULTICAST, false);
-      return new ActiveMQTopic("topicName");  // artemis-jms-client insists on its Topic class, others are more accepting
+      return new ActiveMQTopic(topicName);  // artemis-jms-client insists on its Topic class, others are more accepting
    }
 }
