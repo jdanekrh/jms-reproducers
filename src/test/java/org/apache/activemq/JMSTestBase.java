@@ -24,7 +24,7 @@ import java.util.Collection;
 import static com.google.common.truth.TruthJUnit.assume;
 
 public class JMSTestBase {
-   private static String NETTY_CONNECTOR_FACTORY = NettyConnectorFactory.class.getCanonicalName();;
+   private static String NETTY_CONNECTOR_FACTORY = NettyConnectorFactory.class.getCanonicalName();
 
    @Parameterized.Parameters(name = "protocol={0}")
    public static Collection getParameters() {
