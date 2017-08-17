@@ -51,6 +51,8 @@ public class JMSTestBase {
 
    @BeforeClass
    public static void setUpClass() throws Exception {
+      // comment this out when running against ActiveMQ 5,
+      // then comment out anything that crops up in compilation errors
       clientSession = ActiveMQClient.createServerLocatorWithoutHA(new TransportConfiguration(NETTY_CONNECTOR_FACTORY)).createSessionFactory().createSession();
    }
 
@@ -62,7 +64,7 @@ public class JMSTestBase {
             return factory;
          }
          case "amqp": {
-            final JmsConnectionFactory factory = new JmsConnectionFactory("amqp://localhost:61616");
+            final JmsConnectionFactory factory = new JmsConnectionFactory("amqp://localhost:5672");
             factory.setForceAsyncAcks(true);
             return factory;
          }
