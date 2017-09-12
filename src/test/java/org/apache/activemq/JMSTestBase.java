@@ -84,12 +84,14 @@ public class JMSTestBase {
    protected Queue createQueue(final String queueName) throws Exception {
       SimpleString address = SimpleString.toSimpleString(queueName);
       clientSession.createAddress(address, RoutingType.ANYCAST, false);
+//      clientSession.createQueue(address, RoutingType.ANYCAST, address);
       return new ActiveMQQueue(queueName);
    }
 
    protected Topic createTopic(final String topicName) throws Exception {
       SimpleString address = SimpleString.toSimpleString(topicName);
       clientSession.createAddress(address, RoutingType.MULTICAST, false);
+//      clientSession.createQueue(address, RoutingType.MULTICAST, address);
       return new ActiveMQTopic(topicName);  // artemis-jms-client insists on its Topic class, others are more accepting
    }
 }
