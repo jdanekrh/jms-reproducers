@@ -51,6 +51,8 @@ public class JMSTestBase {
 
    @BeforeClass
    public static void setUpClass() throws Exception {
+      // comment this out when running against ActiveMQ 5,
+      // then comment out anything that crops up in compilation errors
       clientSession = ActiveMQClient.createServerLocatorWithoutHA(new TransportConfiguration(NETTY_CONNECTOR_FACTORY)).createSessionFactory().createSession();
    }
 
@@ -62,7 +64,7 @@ public class JMSTestBase {
             return factory;
          }
          case "amqp": {
-            final JmsConnectionFactory factory = new JmsConnectionFactory("amqp://localhost:61616");
+            final JmsConnectionFactory factory = new JmsConnectionFactory("amqp://localhost:5672");
             factory.setForceAsyncAcks(true);
             return factory;
          }
@@ -82,12 +84,14 @@ public class JMSTestBase {
    protected Queue createQueue(final String queueName) throws Exception {
       SimpleString address = SimpleString.toSimpleString(queueName);
       clientSession.createAddress(address, RoutingType.ANYCAST, false);
+//      clientSession.createQueue(address, RoutingType.ANYCAST, address);
       return new ActiveMQQueue(queueName);
    }
 
    protected Topic createTopic(final String topicName) throws Exception {
       SimpleString address = SimpleString.toSimpleString(topicName);
       clientSession.createAddress(address, RoutingType.MULTICAST, false);
+//      clientSession.createQueue(address, RoutingType.MULTICAST, address);
       return new ActiveMQTopic(topicName);  // artemis-jms-client insists on its Topic class, others are more accepting
    }
 }

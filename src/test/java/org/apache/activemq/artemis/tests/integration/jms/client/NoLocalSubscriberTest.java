@@ -92,7 +92,7 @@ public class NoLocalSubscriberTest extends JMSTestBase {
 
          assertEquals("M4", textMessage.getText());
 
-         assertNull(topicSubscriber.receiveNoWait());
+         assertNull(topicSubscriber.receive(500));
 
          connection.close();
       }

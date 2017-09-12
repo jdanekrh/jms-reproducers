@@ -25,6 +25,8 @@ import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 
 import javax.jms.*;
+import java.math.BigInteger;
+import java.util.Random;
 
 @RunWith(value = Parameterized.class)
 public class JMSLargeMessageTest extends JMSTestBase {
@@ -33,6 +35,7 @@ public class JMSLargeMessageTest extends JMSTestBase {
    // Attributes ----------------------------------------------------
 
    Queue queue1;
+   Random random = new Random();
 
    // Static --------------------------------------------------------
 
@@ -44,13 +47,22 @@ public class JMSLargeMessageTest extends JMSTestBase {
    @Before
    public void setUp() throws Exception {
       super.setUp();
-      queue1 = createQueue("queue1");
+      String randomSuffix = new BigInteger(130, random).toString(32);
+      queue1 = createQueue("queue1_" + randomSuffix);
+//      queue1 = createQueue("queue1_");
+   }
+
+   @Test(timeout = 30000)
+   public void testSmallString() throws Exception {
+      sendStringOfSize(1024);
    }
 
    @Test(timeout = 30000)
    public void testHugeString() throws Exception {
-      int msgSize = 1024 * 1024;
+      sendStringOfSize(1024 * 1024);
+   }
 
+   private void sendStringOfSize(int msgSize) throws JMSException {
       Connection conn = cf.createConnection();
 
       Session session = conn.createSession(false, Session.AUTO_ACKNOWLEDGE);
